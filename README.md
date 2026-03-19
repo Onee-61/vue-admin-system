@@ -1,6 +1,16 @@
-# study
+# Vue Admin System
 
-This template should help get you started developing with Vue 3 in Vite.
+此项目是仿照若依后台管理系统进行仿写的项目，主要学习了若依项目的项目结构、布局设计、路由配置、状态管理等前端架构理念。具体代码和实现细节有所出入，仅用于个人学习和实践Vue 3 + Vite技术栈。
+
+**注意：** 此项目非若依官方项目，仅为学习用途，不涉及任何商业或生产环境使用。
+
+## 技术栈
+
+- Vue 3 (Composition API)
+- Vite
+- Vue Router
+- Pinia (状态管理)
+- ESLint
 
 ## Recommended IDE Setup
 
