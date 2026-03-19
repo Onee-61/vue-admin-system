@@ -23,14 +23,16 @@ const handleMenuSelect = (index) => {
 </script>
 
 <template>
-  <el-aside :width="layoutStore.isCollapse ? '64px' : '200px'" style="background-color: #2c3e50;">
+  <el-aside :width="layoutStore.isCollapse ? '64px' : '200px'" class="sidebar">
     <div class="sidebar-header">
-      <h3 v-if="!layoutStore.isCollapse" class="sidebar-title">后台管理系统</h3>
+      <el-icon class="header-icon"><Management /></el-icon>
+      <h3 v-show="!layoutStore.isCollapse" class="sidebar-title">后台管理系统</h3>
     </div>
     <el-menu
       :default-active="'1'"
       class="sidebar-menu"
       :collapse="layoutStore.isCollapse"
+      :collapse-transition="false"
       background-color="#2c3e50"
       text-color="#fff"
       active-text-color="#409EFF"
@@ -42,16 +44,24 @@ const handleMenuSelect = (index) => {
         :index="item.index"
       >
         <el-icon><component :is="item.icon" /></el-icon>
-        <span>{{ item.title }}</span>
+        <span class="menu-text">{{ item.title }}</span>
       </el-menu-item>
     </el-menu>
   </el-aside>
 </template>
 
 <style scoped>
+.sidebar {
+  background-color: #2c3e50;
+  transition: width 0.3s ease;
+}
+
 .sidebar-header {
-  padding: 20px 10px 10px;
-  text-align: center;
+  display: flex;
+  height: 60px;
+  padding: 0 20px;
+  align-items: center;
+  gap: 8px;
 }
 
 .sidebar-title {
@@ -59,9 +69,31 @@ const handleMenuSelect = (index) => {
   font-size: 18px;
   font-weight: 400;
   margin: 0;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin: 0 3px;
 }
 
 .sidebar-menu {
   border-right: none;
+}
+
+.menu-text {
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
