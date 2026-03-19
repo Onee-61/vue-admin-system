@@ -1,9 +1,10 @@
 <script setup>
 import { reactive } from 'vue'
-import router from '@/router'
+import { useRouter } from '@/router'
 
 import { register } from '@/api/login'
 
+const router = useRouter()
 const registerForm = reactive({
   username: '',
   password: ''

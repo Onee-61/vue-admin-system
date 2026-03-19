@@ -7,9 +7,9 @@ import { getToken } from "@/utils/auth"
 export const useUserStore = defineStore('user', () => {
   const userInfo = reactive({
     token: getToken(),
-    id: '',
-    name: '',
-    roles: [],
+    id: '1',
+    username: 'admin',
+    roles: ['admin'],
     permissions: [],
   })
 
@@ -19,7 +19,7 @@ export const useUserStore = defineStore('user', () => {
       const info = {
         token: res.token,
         id: res.id,
-        name: res.name,
+        username: res.username,
         roles: res.roles,
         permissions: res.permissions,
       }
@@ -37,7 +37,7 @@ export const useUserStore = defineStore('user', () => {
   const setUserInfo = (info) => {
     userInfo.token = info.token
     userInfo.id = info.id
-    userInfo.name = info.name
+    userInfo.username = info.username
     userInfo.roles = info.roles
     userInfo.permissions = info.permissions
   }
@@ -45,7 +45,7 @@ export const useUserStore = defineStore('user', () => {
   const removeUserInfo = () => {
     userInfo.token = ''
     userInfo.id = ''
-    userInfo.name = ''
+    userInfo.username = ''
     userInfo.roles = []
     userInfo.permissions = []
   }

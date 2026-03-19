@@ -1,11 +1,11 @@
 <script setup>
 import { reactive } from 'vue'
-import router from '@/router'
+import { useRouter } from '@/router'
 
 import { useUserStore } from '@/stores/modules/user'
 
+const router = useRouter()
 const userStore = useUserStore()
-
 const loginForm = reactive({
   username: 'admin',
   password: '123456'

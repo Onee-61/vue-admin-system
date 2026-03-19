@@ -18,6 +18,23 @@ export const constantRoutes = [
       {
         path: '/index',
         component: () => import('@/views/index.vue')
+      },
+      {
+        path: '/profile',
+        component: () => import('@/views/profile.vue')
+      },
+      {
+        path: '/system',
+        children: [
+          {
+            path: 'user',
+            component: () => import('@/views/system/user/index.vue')
+          },
+          {
+            path: 'role',
+            component: () => import('@/views/system/role/index.vue')
+          }
+        ]
       }
     ]
   }
