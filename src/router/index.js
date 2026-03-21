@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Layout from '@/layout/index.vue'
-import { useUserStore } from '@/stores/modules/user'
 
 /**
  * Note: 路由配置项

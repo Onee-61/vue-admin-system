@@ -6,6 +6,12 @@ const user = userStore.userInfo
 
 <template>
   <div>
+    <h3>用户信息</h3>
+  </div>
+  <div>
+    <div>登陆状态：{{ user.token ? '已登录' : '未登录' }}</div>
+  </div>
+  <div>
     <img :src="user.avatar" alt="用户头像" />
   </div>
   <div>
