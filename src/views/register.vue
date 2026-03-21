@@ -1,6 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
-import { useRouter } from '@/router'
+import { useRouter } from 'vue-router'
 
 import { register } from '@/api/login'
 

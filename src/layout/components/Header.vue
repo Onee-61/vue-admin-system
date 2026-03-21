@@ -20,6 +20,7 @@ const handleCommand = (command) => {
   } else if (command === 'logout') {
     userStore.userLogout()
     router.push('/login')
+    ElMessage.success('退出登录成功')
   }
 }
 </script>

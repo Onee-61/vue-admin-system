@@ -7,6 +7,8 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
+const baseUrl = 'http://localhost:8080'
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -24,4 +26,19 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    port: 5173,
+    host: true,
+    proxy: {
+      '/dev-api': {
+        target: baseUrl,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/dev-api/, '')
+      },
+      '/getRouters': {
+        target: baseUrl,
+        changeOrigin: true
+      }
+    }
+  }
 })

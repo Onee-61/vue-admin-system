@@ -2,7 +2,7 @@ import axios from 'axios'
 import { getToken, removeToken } from '@/utils/auth'
 
 const request = axios.create({
-  baseURL: '',
+  baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 10000
 })
 
@@ -50,7 +50,7 @@ request.interceptors.response.use(res => {
   }else if (code === 500) {
     // 500: 服务器错误
     ElMessage.error(msg || '服务器错误')
-    return Promise.reject(new Error(msg))
+    return Promise.reject(new Error(msg))  
   }else if (code !== 200) {
     // 其他错误
     ElMessage.error(msg || '请求错误')

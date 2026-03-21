@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useLayoutStore } from '@/stores/modules/layout'
+import { computed } from 'vue'
 
 const router = useRouter()
+const route = useRoute()
 const layoutStore = useLayoutStore()
 
 // 菜单项
@@ -12,6 +13,12 @@ const menuItems = [
   { index: '2', icon: 'User', title: '用户管理', path: '/system/user' },
   { index: '3', icon: 'UserFilled', title: '角色管理', path: '/system/role' },
 ]
+
+// 根据当前路由计算激活的菜单项
+const activeMenu = computed(() => {
+  const item = menuItems.find(item => route.path === item.path)
+  return item ? item.index : '0'
+})
 
 // 菜单点击处理
 const handleMenuSelect = (index) => {
@@ -29,7 +36,7 @@ const handleMenuSelect = (index) => {
       <h3 v-show="!layoutStore.isCollapse" class="sidebar-title">后台管理系统</h3>
     </div>
     <el-menu
-      :default-active="'1'"
+      :default-active="activeMenu"
       class="sidebar-menu"
       :collapse="layoutStore.isCollapse"
       :collapse-transition="false"
