@@ -86,6 +86,15 @@ export const constantRoutes = [
               icon: 'UserFilled',
               activeMenu: '/system/role',
             }
+          },
+          {
+            path: 'menu',
+            component: () => import('@/views/system/menu/index.vue'),
+            meta: {
+              title: '菜单管理',
+              icon: 'Menu',
+              activeMenu: '/system/menu',
+            }
           }
         ]
       }

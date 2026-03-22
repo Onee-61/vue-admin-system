@@ -12,6 +12,7 @@ const menuItems = [
   { index: '1', icon: 'HomeFilled', title: '首页', path: '/index' },
   { index: '2', icon: 'User', title: '用户管理', path: '/system/user' },
   { index: '3', icon: 'UserFilled', title: '角色管理', path: '/system/role' },
+  { index: '4', icon: 'Menu', title: '菜单管理', path: '/system/menu' },
 ]
 
 // 根据当前路由计算激活的菜单项

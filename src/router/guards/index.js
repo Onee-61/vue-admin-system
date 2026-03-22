@@ -1,6 +1,7 @@
 import router from '../index'
 
 import { useUserStore } from '@/stores/modules/user'
+import { useRouteStore } from '@/stores/modules/route'
 
 const whiteList = ['/login', '/register']
 
@@ -8,6 +9,7 @@ const whiteList = ['/login', '/register']
 // vue-router 4.x写法
 router.beforeEach(async (to, from) => {
   const userStore = useUserStore()
+  const routeStore = useRouteStore()
   const hasToken = userStore.userInfo.token
   const isWhiteList = whiteList.includes(to.path)
 
@@ -29,10 +31,13 @@ router.beforeEach(async (to, from) => {
   // 已登录的用户访问非白名单页面，尝试获取用户信息
   if (userStore.userInfo.roles.length === 0) {
     try {
-      await userStore.setUserInfo()
-      return true
-    } catch {
+      await userStore.getUserInfo()
+      await routeStore.getRoutes()
+      return { ...to, replace: true }
+    } catch (error) {
       userStore.userLogout()
+      console.log(error.message);
+      
       ElMessage.error('用户信息过期，请重新登录')
       return { path: '/login' }
     }
@@ -63,7 +68,7 @@ router.beforeEach(async (to, from) => {
 //       // 重新获取用户信息
 //       if (userStore.userInfo.roles.length === 0) {
 //         try {
-//           await userStore.setUserInfo()
+//           await userStore.getUserInfo()
 //           next()
 //         } catch {
 //           userStore.userLogout()

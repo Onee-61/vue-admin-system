@@ -19,14 +19,14 @@ export const useUserStore = defineStore('user', () => {
     const res = await login({ username, password })
     userInfo.token = res.token
     setToken(res.token)
-    await setUserInfo()
+    await getUserInfo()
   }
 
   const userLogout = () => {
     removeUserInfo()
   }
 
-  const setUserInfo = async () => {
+  const getUserInfo = async () => {
     const res = await getInfo()
     const user = res.user
 
@@ -52,7 +52,7 @@ export const useUserStore = defineStore('user', () => {
     userInfo,
     userLogin,
     userLogout,
-    setUserInfo,
+    getUserInfo,
     removeUserInfo
   }
 }) 
