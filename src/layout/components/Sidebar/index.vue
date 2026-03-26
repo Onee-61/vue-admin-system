@@ -44,68 +44,62 @@ const sidebarRoutes = computed(() => routeStore.sidebarRoutes)
 
 <style scoped>
 .sidebar {
-  background-color: #2c3e50;
+  background-color: #1e293b;
+  color: #cbd5e1;
+  height: 100vh;
+  overflow-y: auto;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
   transition: width 0.3s ease;
-  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
-  overflow: hidden;
+  border-right: 1px solid #334155;
 }
 
 .sidebar-header {
   display: flex;
-  height: 60px;
-  padding: 0 20px;
   align-items: center;
-  gap: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.sidebar-title {
-  color: white;
-  font-size: 18px;
-  font-weight: 500;
-  margin: 0;
-  transition: opacity 0.3s ease;
-  white-space: nowrap;
-  overflow: hidden;
+  padding: 16px 20px;
+  border-bottom: 1px solid #334155;
+  background-color: #1e293b;
+  height: 64px;
+  box-sizing: border-box;
   text-overflow: ellipsis;
-  letter-spacing: 0.5px;
+  white-space: nowrap;
+  gap: 10px;
 }
 
 .header-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #409EFF;
   font-size: 24px;
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
+  color: #94a3b8;
+}
+
+.sidebar-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #f1f5f9;
+  margin: 0;
+  letter-spacing: 0.5px;
 }
 
 .sidebar-menu {
-  border-right: none;
-  height: calc(100vh - 60px);
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.sidebar-menu::-webkit-scrollbar {
-  width: 6px;
-}
-
-.sidebar-menu::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
-}
-
-.sidebar-menu::-webkit-scrollbar-track {
   background-color: transparent;
+  border-right: none;
+  height: calc(100vh - 64px);
 }
 
-.menu-text {
-  transition: opacity 0.3s ease;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* 滚动条样式 */
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 2px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
 }
 </style>
