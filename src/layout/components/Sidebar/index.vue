@@ -1,59 +1,43 @@
 <script setup>
+import { computed, ref } from 'vue'
+
 import { useRouter, useRoute } from 'vue-router'
 import { useLayoutStore } from '@/stores/modules/layout'
-import { computed } from 'vue'
+import { useRouteStore } from '@/stores/modules/route'
+import SidebarItem from './SidebarItem.vue'
 
 const router = useRouter()
 const route = useRoute()
 const layoutStore = useLayoutStore()
+const routeStore = useRouteStore()
 
-// 菜单项
-const menuItems = [
-  { index: '1', icon: 'HomeFilled', title: '首页', path: '/index' },
-  { index: '2', icon: 'User', title: '用户管理', path: '/system/user' },
-  { index: '3', icon: 'UserFilled', title: '角色管理', path: '/system/role' },
-  { index: '4', icon: 'Menu', title: '菜单管理', path: '/system/menu' },
-]
+const isCollapse = computed(() => layoutStore.isCollapse)
+const sidebarRoutes = computed(() => routeStore.sidebarRoutes)
 
-// 根据当前路由计算激活的菜单项
-const activeMenu = computed(() => {
-  const item = menuItems.find(item => route.path === item.path)
-  return item ? item.index : '0'
-})
-
-// 菜单点击处理
-const handleMenuSelect = (index) => {
-  const item = menuItems.find(item => item.index === index)
-  if (item) {
-    router.push(item.path)
-  }
-}
 </script>
 
 <template>
-  <el-aside :width="layoutStore.isCollapse ? '64px' : '200px'" class="sidebar">
+  <el-aside :width="isCollapse ? '64px' : '200px'" class="sidebar">
     <div class="sidebar-header">
       <el-icon class="header-icon"><Management /></el-icon>
-      <h3 v-show="!layoutStore.isCollapse" class="sidebar-title">后台管理系统</h3>
+      <h3 v-show="!isCollapse" class="sidebar-title">后台管理系统</h3>
     </div>
     <el-menu
-      :default-active="activeMenu"
+      :default-active="route.path"
       class="sidebar-menu"
-      :collapse="layoutStore.isCollapse"
+      :collapse="isCollapse"
       :collapse-transition="false"
       background-color="#2c3e50"
       text-color="#fff"
       active-text-color="#409EFF"
-      @select="handleMenuSelect"
+      router
     >
-      <el-menu-item
-        v-for="item in menuItems"
-        :key="item.index"
-        :index="item.index"
-      >
-        <el-icon><component :is="item.icon" /></el-icon>
-        <span class="menu-text">{{ item.title }}</span>
-      </el-menu-item>
+      <SidebarItem
+        v-for="route in sidebarRoutes"
+        :key="route.path"
+        :item="route"
+        :basePath="'/'"
+      />
     </el-menu>
   </el-aside>
 </template>

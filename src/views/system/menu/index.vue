@@ -1,17 +1,24 @@
 <script setup>
+import { onMounted } from 'vue'
 import { useRouteStore } from '@/stores/modules/route'
-import { onMounted } from 'vue';
+import { listMenu } from '@/api/system/menu'
 
 const routeStore = useRouteStore()
-routeStore.getRoutes()
-// onMounted(() => {
-//   routeStore.getRoutes()
-// })
+const routes = routeStore.allRoutes
+
+onMounted(async () => {
+  try {
+    const res = await listMenu()
+    console.log(res);
+  } catch (error) {
+    console.log(error.message);
+  }
+})
 </script>
 
 <template>
   <h1>菜单管理</h1>
-  <div v-for="item in routeStore.routes" class="route">
+  <div v-for="item in routes" class="route">
     <div><span>name:</span>{{ item.name }}</div>
     <div><span>path:</span>{{ item.path }}</div>
     <div><span>hidden:</span>{{ item.hidden }}</div>

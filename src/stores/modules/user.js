@@ -19,7 +19,6 @@ export const useUserStore = defineStore('user', () => {
     const res = await login({ username, password })
     userInfo.token = res.token
     setToken(res.token)
-    await getUserInfo()
   }
 
   const userLogout = () => {

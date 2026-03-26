@@ -1,8 +1,9 @@
 import router from '../index'
-
+import { isHttp } from '@/utils/validate'
 import { useUserStore } from '@/stores/modules/user'
 import { useRouteStore } from '@/stores/modules/route'
 
+// 白名单页面
 const whiteList = ['/login', '/register']
 
 // 路由守卫
@@ -28,15 +29,33 @@ router.beforeEach(async (to, from) => {
     return { path: '/login' }
   }
 
-  // 已登录的用户访问非白名单页面，尝试获取用户信息
-  if (userStore.userInfo.roles.length === 0) {
+  const userInfo = userStore.userInfo.roles.length > 0
+  const routeInfo = routeStore.allRoutes.length > 0
+  
+  // 已登录的用户访问非白名单页面，确保用户信息和路由信息已加载
+  if (!userInfo || !routeInfo) {
     try {
-      await userStore.getUserInfo()
-      await routeStore.getRoutes()
+      // 如果用户信息不存在，获取用户信息
+      if (!userInfo) {
+        await userStore.getUserInfo()
+      }
+      
+      // 如果路由信息不存在，获取路由信息
+      if (!routeInfo) {
+        await routeStore.getRoutes()
+      }
+
+      // 动态添加路由
+      routeStore.allRoutes.forEach(route => {
+        if (!isHttp(route.path)) {
+          router.addRoute(route)
+        }
+      })
+
       return { ...to, replace: true }
     } catch (error) {
       userStore.userLogout()
-      console.log(error.message);
+      console.error('路由守卫报错：', error.message);
       
       ElMessage.error('用户信息过期，请重新登录')
       return { path: '/login' }

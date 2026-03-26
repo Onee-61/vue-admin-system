@@ -35,10 +35,10 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/dev-api/, '')
       },
-      '/getRouters': {
-        target: baseUrl,
-        changeOrigin: true
-      }
+      // '/getRouters': {
+      //   target: baseUrl,
+      //   changeOrigin: true
+      // }
     }
   }
 })
