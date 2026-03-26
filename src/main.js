@@ -9,12 +9,16 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import '@/assets/styles/index.css'
+import SvgIcon from '@/components/SvgIcon/index.vue'
+import 'virtual:svg-icons-register'
 
 const app = createApp(App);
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
+
+app.component('SvgIcon', SvgIcon)
 
 app.use(createPinia());
 app.use(router);

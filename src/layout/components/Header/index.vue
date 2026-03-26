@@ -46,7 +46,7 @@ const handleCommand = (command) => {
       <div style="display: flex; align-items: center; cursor: pointer;">
         <el-avatar :src="user.avatar || 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'" size="small" style="margin-right: 10px;"></el-avatar>
         <div>
-          <div style="font-weight: bold; color: #333;">{{ user.username }}</div>
+          <div style="font-weight: bold; color: #333;">{{ user.nickname }}</div>
           <div style="font-size: 12px; color: #666;">{{ user.roles?.[0] }}</div>
         </div>
       </div>

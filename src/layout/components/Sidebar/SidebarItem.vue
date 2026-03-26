@@ -44,15 +44,17 @@ const resolvePath = (path) => {
     <!-- 只有一个可见子菜单时或无子菜单（叶子节点），提升子菜单为当前级 -->
     <template v-if="(hasOneShowingChild && !props.item.alwaysShow) || !hasChildren">
       <el-menu-item :index="resolvePath(props.item.path)">
-        <el-icon><component :is="props.item.meta.icon" /></el-icon>
-        <span>{{ props.item.meta.title }}</span>
+        <template #title v-if="props.item.meta">
+          <SvgIcon :icon-class="props.item.meta.icon" />
+          <span>{{ props.item.meta.title }}</span>
+        </template>
       </el-menu-item>
     </template>
     
     <!-- 有多个子菜单或需要显示父级 -->
     <el-sub-menu v-else :index="resolvePath(props.item.path)">
       <template #title v-if="props.item.meta">
-        <el-icon><component :is="props.item.meta.icon" /></el-icon>
+        <SvgIcon :icon-class="props.item.meta.icon" />
         <span>{{ props.item.meta.title }}</span>
       </template>
 
@@ -67,7 +69,71 @@ const resolvePath = (path) => {
   </template>
 </template>
 
-
 <style scoped>
+:deep(.el-menu-item) {
+  height: 50px;
+  line-height: 50px;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
 
+:deep(.el-menu-item:hover) {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+:deep(.el-menu-item.is-active) {
+  background-color: rgba(64, 158, 255, 0.15) !important;
+  border-left-color: #409EFF;
+}
+
+:deep(.el-menu-item .svg-icon) {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+:deep(.el-sub-menu__title) {
+  height: 50px;
+  line-height: 50px;
+  transition: all 0.3s ease;
+}
+
+:deep(.el-sub-menu__title:hover) {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+:deep(.el-sub-menu__title .svg-icon) {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+:deep(.el-menu--collapse .el-menu-item .svg-icon),
+:deep(.el-menu--collapse .el-sub-menu__title .svg-icon) {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  margin-right: 0;
+}
+
+:deep(.el-sub-menu .el-menu-item) {
+  background-color: #1a252f !important;
+  min-width: 180px;
+}
+
+:deep(.el-sub-menu .el-menu-item:hover) {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+:deep(.el-sub-menu .el-menu-item.is-active) {
+  background-color: rgba(64, 158, 255, 0.15) !important;
+  border-left-color: #409EFF;
+}
+
+:deep(.el-sub-menu__icon-arrow) {
+  font-size: 14px;
+  color: #bfcbd9;
+}
 </style>

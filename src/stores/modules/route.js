@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { getRouters } from '@/api/route'
 import Layout from '@/layout/index.vue'
-import ParentView from '@/views/ParentView.vue'
+import ParentView from '@/components/ParentView/index.vue'
 
 // 自动导入所有vue文件
 const modules = import.meta.glob('./../../views/**/*.vue')
