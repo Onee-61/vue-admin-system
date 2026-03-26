@@ -8,7 +8,7 @@ const whiteList = ['/login', '/register']
 
 // 路由守卫
 // vue-router 4.x写法
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to) => {
   const userStore = useUserStore()
   const routeStore = useRouteStore()
   const hasToken = userStore.userInfo.token

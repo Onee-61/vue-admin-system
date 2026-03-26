@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { getRouters } from '@/api/route'
 import Layout from '@/layout/index.vue'
 import ParentView from '@/components/ParentView/index.vue'
+import { constantRoutes } from '@/router/index.js'
 
 // 自动导入所有vue文件
 const modules = import.meta.glob('./../../views/**/*.vue')
@@ -20,8 +21,8 @@ export const useRouteStore = defineStore('route', () => {
       const sidebarData = JSON.parse(JSON.stringify(res.data))
       const topbarData = JSON.parse(JSON.stringify(res.data))
       
-      allRoutes.value = filterRouter(allData)
-      sidebarRoutes.value = filterRouter(sidebarData)
+      allRoutes.value = constantRoutes.concat(filterRouter(allData))
+      sidebarRoutes.value = constantRoutes.concat(filterRouter(sidebarData))
       topbarRoutes.value = filterRouter(topbarData)
     
     } catch (error) {

@@ -43,6 +43,108 @@ const sidebarRoutes = computed(() => routeStore.sidebarRoutes)
 </template>
 
 <style scoped>
+:deep(.el-menu-item),
+:deep(.el-sub-menu__title) {
+  height: 50px;
+  line-height: 50px;
+  margin-bottom: 0 !important;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+:deep(.el-menu-item) {
+  gap: 10px;
+}
+
+:deep(.el-sub-menu__title) {
+  gap: 10px;
+}
+
+:deep(.el-menu-item:before),
+:deep(.el-sub-menu__title:before) {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, rgba(64, 158, 255, 0.2) 0%, transparent 100%);
+  transition: width 0.3s ease;
+}
+
+:deep(.el-menu-item:hover:before),
+:deep(.el-sub-menu__title:hover:before),
+:deep(.el-menu-item.is-active:before) {
+  width: 100%;
+}
+
+:deep(.el-menu-item:hover),
+:deep(.el-sub-menu__title:hover) {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #409EFF !important;
+}
+
+:deep(.el-menu-item.is-active) {
+  background: linear-gradient(90deg, rgba(64, 158, 255, 0.2) 0%, rgba(64, 158, 255, 0.05) 100%) !important;
+  border-left-color: #409EFF;
+  color: #409EFF !important;
+}
+
+:deep(.el-menu-item .svg-icon),
+:deep(.el-sub-menu__title .svg-icon) {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  vertical-align: middle;
+  transition: all 0.3s ease;
+  fill: currentColor;
+}
+
+:deep(.el-sub-menu__title .svg-icon) {
+  margin-right: 10px;
+}
+
+:deep(.el-menu--collapse .el-menu-item .svg-icon),
+:deep(.el-menu--collapse .el-sub-menu__title .svg-icon) {
+  margin-right: 0;
+}
+
+:deep(.el-menu-item span),
+:deep(.el-sub-menu__title span) {
+  vertical-align: middle;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+:deep(.el-menu-item.is-active .svg-icon),
+:deep(.el-menu-item:hover .svg-icon),
+:deep(.el-sub-menu__title:hover .svg-icon) {
+  fill: #409EFF;
+}
+
+:deep(.el-sub-menu .el-menu-item) {
+  background-color: transparent !important;
+  min-width: 180px;
+}
+
+:deep(.el-sub-menu .el-menu-item:hover) {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+:deep(.el-sub-menu__icon-arrow) {
+  font-size: 12px;
+  color: #bfcbd9;
+  transition: all 0.3s ease;
+  vertical-align: middle;
+}
+
+:deep(.el-sub-menu__title:hover .el-sub-menu__icon-arrow) {
+  color: #409EFF;
+  transform: rotate(360deg);
+}
+
 .sidebar {
   background-color: #1e293b;
   color: #cbd5e1;

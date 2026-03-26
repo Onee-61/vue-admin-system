@@ -52,54 +52,24 @@ export const constantRoutes = [
     redirect: '/index',
     children: [
       {
-        path: 'index',
+        path: '/index',
         component: () => import('@/views/index.vue'),
         meta: {
           title: '首页',
-          icon: 'HomeFilled',
+          name: 'Index',
+          icon: 'dashboard',
           activeMenu: '/index',
         }
       },
       {
-        path: 'profile',
+        path: '/profile',
+        name: 'profile',
         component: () => import('@/views/profile.vue'),
         hidden: true,
       },
-      {
-        path: 'system',
-        redirect: 'system/user',
-        children: [
-          {
-            path: 'user',
-            component: () => import('@/views/system/user/index.vue'),
-            meta: {
-              title: '用户管理',
-              icon: 'User',
-              activeMenu: '/system/user',
-            }
-          },
-          {
-            path: 'role',
-            component: () => import('@/views/system/role/index.vue'),
-            meta: {
-              title: '角色管理',
-              icon: 'UserFilled',
-              activeMenu: '/system/role',
-            }
-          },
-          {
-            path: 'menu',
-            component: () => import('@/views/system/menu/index.vue'),
-            meta: {
-              title: '菜单管理',
-              icon: 'Menu',
-              activeMenu: '/system/menu',
-            }
-          }
-        ]
-      }
     ]
-  }
+  },
+  
 ]
 
 export const dynamicRoutes = []
