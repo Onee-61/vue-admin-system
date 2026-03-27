@@ -13,6 +13,13 @@ const routeStore = useRouteStore()
 
 const isCollapse = computed(() => layoutStore.isCollapse)
 const sidebarRoutes = computed(() => routeStore.sidebarRoutes)
+const activeMenu = computed(() => {
+  const { meta, path } = route
+  if (meta.activeMenu) {
+    return meta.activeMenu
+  }
+  return path
+})
 
 </script>
 
@@ -23,7 +30,7 @@ const sidebarRoutes = computed(() => routeStore.sidebarRoutes)
       <h3 v-show="!isCollapse" class="sidebar-title">后台管理系统</h3>
     </div>
     <el-menu
-      :default-active="route.path"
+      :default-active="activeMenu"
       class="sidebar-menu"
       :collapse="isCollapse"
       :collapse-transition="false"
@@ -52,14 +59,6 @@ const sidebarRoutes = computed(() => routeStore.sidebarRoutes)
   border-left: 3px solid transparent;
   position: relative;
   overflow: hidden;
-}
-
-:deep(.el-menu-item) {
-  gap: 10px;
-}
-
-:deep(.el-sub-menu__title) {
-  gap: 10px;
 }
 
 :deep(.el-menu-item:before),
@@ -102,6 +101,7 @@ const sidebarRoutes = computed(() => routeStore.sidebarRoutes)
   fill: currentColor;
 }
 
+:deep(.el-menu-item .svg-icon),
 :deep(.el-sub-menu__title .svg-icon) {
   margin-right: 10px;
 }

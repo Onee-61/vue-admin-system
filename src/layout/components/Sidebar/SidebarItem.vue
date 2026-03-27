@@ -48,8 +48,8 @@ const resolvePath = (path) => {
     <!-- 无子菜单（叶子节点），提升子菜单为当前级 -->
     <template v-if="!hasChildren">
       <el-menu-item :index="resolvePath(props.item.path)">
+        <SvgIcon :icon-class="props.item.meta.icon" />
         <template #title v-if="props.item.meta">
-          <SvgIcon :icon-class="props.item.meta.icon" />
           <span>{{ props.item.meta.title }}</span>
         </template>
       </el-menu-item>
@@ -58,8 +58,8 @@ const resolvePath = (path) => {
     <!-- 只有一个可见子菜单时，提升子菜单为当前级 -->
     <template v-else-if="hasOneShowingChild && !props.item.alwaysShow">
       <el-menu-item :index="resolvePath(showingChild[0].path)">
+        <SvgIcon :icon-class="showingChild[0].meta.icon" />
         <template #title v-if="showingChild[0].meta">
-          <SvgIcon :icon-class="showingChild[0].meta.icon" />
           <span>{{ showingChild[0].meta.title }}</span>
         </template>
       </el-menu-item>
