@@ -11,7 +11,7 @@ export const listMenu = () => {
 // 获取菜单详情
 export const getMenu = (menuId) => {
   return request({
-    url: '/system/menu/get/' + menuId,
+    url: '/system/menu/' + menuId,
     method: 'get'
   })
 }
