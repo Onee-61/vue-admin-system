@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
 import Layout from '@/layout/index.vue'
 
 /**
@@ -27,8 +26,8 @@ import Layout from '@/layout/index.vue'
 export const constantRoutes = [
   {
     path: '/redirect',
-    component: Layout,
     hidden: true,
+    component: Layout,
     children: [
       {
         path: '/redirect/:path(.*)',
@@ -45,6 +44,11 @@ export const constantRoutes = [
     path: '/register',
     component: () => import('@/views/register.vue'),
     hidden: true,
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    component: () => import('@/views/index.vue'),
+    hidden: true
   },
   {
     path: '/',

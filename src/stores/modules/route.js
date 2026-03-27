@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, markRaw } from 'vue'
 import { getRouters } from '@/api/route'
 import Layout from '@/layout/index.vue'
 import ParentView from '@/components/ParentView/index.vue'
@@ -11,6 +11,7 @@ const modules = import.meta.glob('./../../views/**/*.vue')
 export const useRouteStore = defineStore('route', () => {
   // 完整路由（静态路由+动态路由）
   const allRoutes = ref([])
+  const dynamicRoutes = ref([])
   const sidebarRoutes = ref([])
   const topbarRoutes = ref([])
 
@@ -33,12 +34,14 @@ export const useRouteStore = defineStore('route', () => {
 
   const filterRouter = (routeMap) => {
     return routeMap.map(item => {
-      if (item.component === 'Layout') {
-        item.component = Layout
-      } else if (item.component === 'ParentView') {
-        item.component = ParentView
-      } else {
-        item.component = loadView(item.component)
+      if (item.component) {
+        if (item.component === 'Layout') {
+          item.component = markRaw(Layout)
+        } else if (item.component === 'ParentView') {
+          item.component = markRaw(ParentView)
+        } else {
+          item.component = loadView(item.component)
+        }
       }
 
       if (item.children && item.children.length > 0) {
@@ -74,6 +77,7 @@ export const useRouteStore = defineStore('route', () => {
 
   return {
     allRoutes,
+    dynamicRoutes,
     sidebarRoutes,
     topbarRoutes,
     getRoutes,

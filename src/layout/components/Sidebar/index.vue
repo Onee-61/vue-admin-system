@@ -1,12 +1,11 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useLayoutStore } from '@/stores/modules/layout'
 import { useRouteStore } from '@/stores/modules/route'
 import SidebarItem from './SidebarItem.vue'
 
-const router = useRouter()
 const route = useRoute()
 const layoutStore = useLayoutStore()
 const routeStore = useRouteStore()
