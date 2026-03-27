@@ -13,10 +13,12 @@ const dialogForm = ref({
   menuName: null,
 })
 
-const handleEditSubmit = (formData) => {
-  console.log('提交表单数据:', formData)
-}
+const queryParams = ref({
+  menuName: null,
+  status: null
+})
 
+// 获取菜单列表
 const getMenuList = async () => {
   try {
     const res = await listMenu()
@@ -24,6 +26,23 @@ const getMenuList = async () => {
   } catch (error) {
     console.log(error.message);
   }
+}
+
+// 查询菜单
+const handleQuery = async () => {
+  try {
+    const res = await listMenu(queryParams.value)
+    menuList.value = handleTree(res.data,'menuId')
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+// 重置查询
+const handleReset = () => {
+  queryParams.value.menuName = ''
+  queryParams.value.status = ''
+  getMenuList()
 }
 
 // 编辑、新增、删除菜单
@@ -41,6 +60,22 @@ onMounted(() => {
 
 <template>
   <h1>菜单管理</h1>
+  <el-form :inline="true" :model="queryParams" style="margin-bottom: 20px">
+    <el-form-item label="菜单名称">
+      <el-input v-model="queryParams.menuName" placeholder="请输入菜单名称" clearable />
+    </el-form-item>
+    <el-form-item label="状态">
+      <el-select v-model="queryParams.status" placeholder="请选择状态" clearable style="width: 180px">
+        <el-option label="正常" value="0" />
+        <el-option label="停用" value="1" />
+      </el-select>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="handleQuery">查询</el-button>
+      <el-button @click="handleReset">重置</el-button>
+    </el-form-item>
+  </el-form>
+  
   <el-table :data="menuList" style="width: 100%" row-key="menuName">
     <el-table-column prop="menuName" label="菜单名称" width="160" />
     <el-table-column prop="icon" label="图标" width="80">

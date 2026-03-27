@@ -1,10 +1,11 @@
 import request from '@/utils/request'
 
 // 获取菜单列表
-export const listMenu = () => {
+export const listMenu = (query) => {
   return request({
     url: '/system/menu/list',
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 
