@@ -1,6 +1,8 @@
 <script setup>
 import { ref, toRefs, watch, computed } from 'vue'
-import { getMenu } from '@/api/system/menu'
+import { getMenu, listMenu, addMenu, updateMenu, delMenu } from '@/api/system/menu'
+import { handleTree } from '@/utils/common'
+import IconSelector from '@/components/IconSelector/index.vue'
 
 const props = defineProps({
   visible: {
@@ -26,6 +28,7 @@ const emit = defineEmits(['update:visible', 'refresh'])
 const { visible, dialogMode, menuId, menuName } = toRefs(props)
 
 const formRef = ref(null)
+const menuOptions = ref([])
 const form = ref({
   menuId: null,
   parentId: 0,
@@ -59,6 +62,7 @@ const formRules = {
   ]
 }
 
+// 重置表单
 const resetForm = () => {
   form.value = {
     menuId: null,
@@ -82,6 +86,7 @@ const resetForm = () => {
   }
 }
 
+// 对话框标题
 const dialogTitle = computed(() => {
   if (dialogMode.value === 'edit') {
     return '编辑菜单'
@@ -119,6 +124,7 @@ const isCacheOptions = [
   { label: '不缓存', value: '1' }
 ]
 
+// 查询菜单详情
 const getMenuDetail = async (menuId) => {
   try {
     const res = await getMenu(menuId)
@@ -145,22 +151,83 @@ const getMenuDetail = async (menuId) => {
   }
 }
 
+// 查询菜单下拉树结构
+const getTreeSelect = async () => {
+  menuOptions.value = []
+  const menu = { menuId: 0, menuName: "主类目", children: [] }
+  const res = await listMenu()
+  menu.children = handleTree(res.data, "menuId")
+  menuOptions.value.push(menu)
+}
+
+// 提交表单
 const submitForm = async () => {
-  await formRef.value.validate()
+  
+  if (dialogMode.value === 'edit') {
+    await formRef.value.validate()
+    await editMenu()
+  } else if (dialogMode.value === 'add') {
+    await formRef.value.validate()
+    await createMenu()
+  } else if (dialogMode.value === 'delete') {
+    await deleteMenu()
+  }
+
   emit('update:visible', false)
   emit('refresh')
 }
 
+// 编辑菜单
+const editMenu = async () => {
+  try {
+    await updateMenu(form.value)
+    ElMessage.success('更新成功')
+  } catch (error) {
+    console.log(error.message)
+    ElMessage.error('更新失败')
+  }
+}
+// 新增菜单
+const createMenu = async () => {
+  try {
+    await addMenu(form.value)
+    ElMessage.success('新增成功')
+  } catch (error) {
+    console.log(error.message)
+    ElMessage.error('新增失败')
+  }
+}
+
+// 删除菜单
+const deleteMenu = async () => {
+  try {
+    await delMenu(menuId.value)
+    ElMessage.success('删除成功')
+  } catch (error) {
+    console.log(error.message)
+    ElMessage.error('删除失败')
+  }
+}
+
+// 选择图标
+const selected = (icon) => {
+  form.value.icon = icon
+}
+
+// 关闭模态框
 const handleClose = () => {
   resetForm()
   emit('update:visible', false)
 }
 
+// 监听visible变化
 watch(visible, (newVal) => {
   if (newVal === true) { // 打开模态框
     if (dialogMode.value === 'edit' && menuId.value) { // 编辑菜单
       // 获取菜单详情
       getMenuDetail(menuId.value)
+      // 获取菜单下拉树结构
+      getTreeSelect()
     } else if (dialogMode.value === 'add') { // 新增菜单
       // 清空表单数据
       resetForm()
@@ -174,7 +241,7 @@ watch(visible, (newVal) => {
 
 <template>
   <el-dialog
-    v-model="visible"
+    :model-value="visible"
     :title="dialogTitle"
     width="700px"
     @close="handleClose"
@@ -189,14 +256,18 @@ watch(visible, (newVal) => {
       label-width="100px"
     >
       <el-row>
-        <el-form-item label="上级菜单">
-          <el-input v-model="form.parentId" placeholder="上级菜单">
-            {{ form.parentId }}
-          </el-input>
-          <!-- <el-select v-model="form.parentId" placeholder="请选择上级菜单">
-            <el-option v-for="item in menuList" :key="item.menuId" :label="item.menuName" :value="item.menuId" />
-          </el-select> -->
-        </el-form-item>
+        <el-col :span="24">
+          <el-form-item label="上级菜单">
+            <el-tree-select
+              v-model="form.parentId"
+              :data="menuOptions"
+              :props="{ value: 'menuId', label: 'menuName', children: 'children' }"
+              value-key="menuId"
+              placeholder="选择上级菜单"
+              check-strictly
+            />
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-row>
         <el-form-item label="菜单类型" prop="menuType">
@@ -210,11 +281,26 @@ watch(visible, (newVal) => {
       <el-row>
         <el-col :span="12">
           <el-form-item label="菜单图标" prop="icon">
-            <el-input v-model="form.icon" placeholder="请输入图标" clearable>
-              <template #prefix>
-                <SvgIcon v-if="form.icon" :icon-class="form.icon" />
+            <el-popover
+              placement="bottom-start"
+              :width="540"
+              trigger="click"
+            >
+              <template #reference>
+                  <el-input v-model="form.icon" placeholder="点击选择图标" readonly>
+                    <template #prefix>
+                        <svg-icon
+                          v-if="form.icon"
+                          :icon-class="form.icon"
+                          class="el-input__icon"
+                          style="height: 32px;width: 16px;"
+                        />
+                        <el-icon v-else style="height: 32px;width: 16px;"><search /></el-icon>
+                    </template>
+                  </el-input>
               </template>
-            </el-input>
+              <icon-selector ref="iconSelectorRef" @selected="selected" :active-icon="form.icon" />
+            </el-popover>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -334,19 +420,3 @@ watch(visible, (newVal) => {
     </template>
   </el-dialog>
 </template>
-
-<style scoped>
-:deep(.el-dialog__header) {
-  border-bottom: 1px solid #3b3c3d;
-  /* padding-bottom: 20px; */
-}
-
-:deep(.el-dialog__body) {
-  border: 1px solid #000;
-}
-
-:deep(.el-dialog__footer) {
-  border-top: 1px solid #3b3c3d;
-  /* padding-top: 20px; */
-}
-</style>

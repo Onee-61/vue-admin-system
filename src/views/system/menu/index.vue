@@ -45,13 +45,13 @@ onMounted(() => {
     <el-table-column prop="menuName" label="菜单名称" width="160" />
     <el-table-column prop="icon" label="图标" width="80">
       <template #default="scope">
-        <SvgIcon  :icon-class="scope.row.icon" />
+        <SvgIcon :icon-class="scope.row.icon" />
       </template>
     </el-table-column>
 
     <el-table-column prop="orderNum" label="排序" width="60" />
-    <el-table-column prop="perms" label="权限标识" width="220" />
-    <el-table-column prop="component" label="组件" width="200" />
+    <el-table-column prop="perms" label="权限标识" />
+    <el-table-column prop="component" label="组件" />
     <el-table-column prop="status" label="状态" width="80" >
       <template #default="scope">
         <el-tag :type="scope.row.status === '0' ? 'primary' : 'danger'">{{ scope.row.status === '0' ? '正常' : '停用' }}</el-tag>
@@ -76,8 +76,3 @@ onMounted(() => {
     @refresh="getMenuList"
   />
 </template>
-<style>
-.route span {
-  color: red;
-}
-</style>
