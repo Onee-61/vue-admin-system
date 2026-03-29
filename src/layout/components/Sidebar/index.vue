@@ -148,10 +148,12 @@ const activeMenu = computed(() => {
   background-color: #1e293b;
   color: #cbd5e1;
   height: 100vh;
-  overflow-y: auto;
+  overflow: hidden;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
   transition: width 0.3s ease;
   border-right: 1px solid #334155;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-header {
@@ -165,6 +167,10 @@ const activeMenu = computed(() => {
   text-overflow: ellipsis;
   white-space: nowrap;
   gap: 10px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .header-icon {
@@ -183,24 +189,26 @@ const activeMenu = computed(() => {
 .sidebar-menu {
   background-color: transparent;
   border-right: none;
-  height: calc(100vh - 64px);
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* 滚动条样式 */
-.sidebar::-webkit-scrollbar {
+.sidebar-menu::-webkit-scrollbar {
   width: 4px;
 }
 
-.sidebar::-webkit-scrollbar-track {
+.sidebar-menu::-webkit-scrollbar-track {
   background: #1e293b;
 }
 
-.sidebar::-webkit-scrollbar-thumb {
+.sidebar-menu::-webkit-scrollbar-thumb {
   background: #475569;
   border-radius: 2px;
 }
 
-.sidebar::-webkit-scrollbar-thumb:hover {
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
   background: #64748b;
 }
 </style>

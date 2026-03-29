@@ -41,6 +41,7 @@ const getRoleList = async () => {
   }
 }
 
+// 角色状态切换
 const handleStatusChange = async (row) => {
   try {
     const res = await changeRoleStatus(row.roleId, row.status)
@@ -83,7 +84,6 @@ const handleDataScope = (row) => {
 
 // 将角色分配给用户
 const handleAuthUser = (row) => {
-  console.log(row)
   router.push({
     path: '/system/role-auth/user/' + row.roleId
   })
