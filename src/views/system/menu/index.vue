@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 
 import { listMenu } from '@/api/system/menu'
 import { handleTree } from '@/utils/common'
-import EditDialog from './EditDialog.vue'
+import EditDialog from './editDialog.vue'
 
 const menuList = ref([])
 const dialogForm = ref({

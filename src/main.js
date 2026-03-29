@@ -11,6 +11,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import '@/assets/styles/index.css'
 import SvgIcon from '@/components/SvgIcon/index.vue'
 import 'virtual:svg-icons-register'
+import directive from './directive/index.js'
 
 const app = createApp(App);
 
@@ -22,5 +23,7 @@ app.component('SvgIcon', SvgIcon)
 
 app.use(createPinia());
 app.use(router);
+
+directive(app)
 
 app.mount("#app");

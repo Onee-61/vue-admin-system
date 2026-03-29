@@ -3,7 +3,8 @@ import { ref, markRaw } from 'vue'
 import { getRouters } from '@/api/route'
 import Layout from '@/layout/index.vue'
 import ParentView from '@/components/ParentView/index.vue'
-import { constantRoutes } from '@/router/index.js'
+import { constantRoutes, dynamicRoutes } from '@/router/index.js'
+import { hasPermOr, hasRoleOr } from '@/utils/permission.js'
 
 // 自动导入所有vue文件
 const modules = import.meta.glob('./../../views/**/*.vue')
@@ -11,7 +12,6 @@ const modules = import.meta.glob('./../../views/**/*.vue')
 export const useRouteStore = defineStore('route', () => {
   // 完整路由（静态路由+动态路由）
   const allRoutes = ref([])
-  const dynamicRoutes = ref([])
   const sidebarRoutes = ref([])
   const topbarRoutes = ref([])
 
@@ -25,6 +25,8 @@ export const useRouteStore = defineStore('route', () => {
       allRoutes.value = constantRoutes.concat(filterRouter(allData))
       sidebarRoutes.value = constantRoutes.concat(filterRouter(sidebarData))
       topbarRoutes.value = filterRouter(topbarData)
+
+      allRoutes.value = allRoutes.value.concat(filterDynamicRoutes())
     
     } catch (error) {
       console.log(error);
@@ -55,6 +57,22 @@ export const useRouteStore = defineStore('route', () => {
     })
   }
 
+  const filterDynamicRoutes = () => {
+    const res = []
+    dynamicRoutes.forEach(route => {
+      if (route.permissions) {
+        if (hasPermOr(route.permissions)) {
+          res.push(route)
+        }
+      } else if (route.roles) {
+        if (hasRoleOr(route.roles)) {
+          res.push(route)
+        }
+      }
+    })
+    return res
+  }
+
   // modules的内容如下：
   // {
   // ../../views/index.vue: () => import("/src/views/index.vue")
@@ -77,7 +95,6 @@ export const useRouteStore = defineStore('route', () => {
 
   return {
     allRoutes,
-    dynamicRoutes,
     sidebarRoutes,
     topbarRoutes,
     getRoutes,
