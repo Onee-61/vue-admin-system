@@ -2,12 +2,19 @@
 import { ref, onMounted } from 'vue'
 import { parseTime } from '@/utils/common'
 import { list, delOperlog, cleanOperlog } from '@/api/system/operlog'
+import { ElMessageBox } from 'element-plus'
 
+const ids = ref([])
 const logList = ref([])
 const total = ref(0)
 const queryForm = ref({
   pageNum: 1,
-  pageSize: 10
+  pageSize: 10,
+  operIp: undefined,
+  title: undefined,
+  operName: undefined,
+  businessType: undefined,
+  status: undefined
 })
 const dialogForm = ref({
   visible: false,
@@ -27,6 +34,21 @@ const dictMap = {
   9: { label: '清空数据', type: 'danger' }
 }
 
+const statusMap = {
+  0: { label: '正常', type: 'primary' },
+  1: { label: '失败', type: 'danger' }
+}
+
+const businessTypeOptions = Object.entries(dictMap).map(([value, item]) => ({
+  value: Number(value),
+  label: item.label
+}))
+
+const statusOptions = Object.entries(statusMap).map(([value, item]) => ({
+  value: Number(value),
+  label: item.label
+}))
+
 // 查询操作日志列表
 const getLogList = async () => {
   try {
@@ -39,15 +61,44 @@ const getLogList = async () => {
 }
 
 // 删除操作日志
-const handleDelete = (operId) => {
+const handleDelete = async (row) => {
+  try {
+    await ElMessageBox.confirm('确认删除选中项吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
 
+    await delOperlog(row.operId || ids.value)
+    ElMessage.success('删除成功')
+    getLogList()
+  } catch (error) {
+    if (error !== 'cancel') {
+      console.log(error);
+    }
+  }
 }
 
 // 清空操作日志
-const handleClean = () => {
+const handleClean = async () => {
+  try {
+    await ElMessageBox.confirm('确认清空所有操作日志吗？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
 
+    await cleanOperlog()
+    ElMessage.success('清空成功')
+    getLogList()
+  } catch (error) {
+    if (error !== 'cancel') {
+      console.log(error);
+    }
+  }
 }
 
+// 查看详情
 const handleDetail = (row) => {
   dialogForm.value.visible = true
   dialogForm.value.form = row
@@ -55,7 +106,21 @@ const handleDetail = (row) => {
 
 // 处理选择变化
 const handleSelectionChange = (selection) => {
-  console.log(selection)
+  ids.value = selection.map(item => item.operId)
+}
+
+// 重置查询
+const handleReset = () => {
+  queryForm.value = {
+    pageNum: 1,
+    pageSize: 10,
+    operIp: undefined,
+    title: undefined,
+    operName: undefined,
+    businessType: undefined,
+    status: undefined
+  }
+  getLogList()
 }
 
 onMounted(() => {
@@ -64,6 +129,65 @@ onMounted(() => {
 </script>
 
 <template>
+  <h1>操作日志</h1>
+  <el-form label-width="70px" :inline="true">
+    <el-form-item label="操作地址" prop="operIp">
+      <el-input 
+        v-model="queryForm.operIp" 
+        placeholder="请输入操作地址" 
+        style="width: 200px;"
+        @keyup.enter="getLogList"
+      />
+    </el-form-item>
+    <el-form-item label="系统模块" prop="title">
+      <el-input 
+        v-model="queryForm.title" 
+        placeholder="请输入系统模块" 
+        style="width: 200px;"
+        @keyup.enter="getLogList"
+      />
+    </el-form-item>
+    <el-form-item label="操作人员" prop="operName">
+      <el-input 
+        v-model="queryForm.operName" 
+        placeholder="请输入操作人员" 
+        style="width: 200px;"
+        @keyup.enter="getLogList"
+      />
+    </el-form-item>
+    <el-form-item label="操作类型" prop="businessType">
+      <el-select 
+        v-model="queryForm.businessType" 
+        placeholder="请选择操作类型"
+        style="width: 200px;"
+        @change="getLogList"
+      >
+        <el-option v-for="item in businessTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
+      </el-select>
+    </el-form-item>
+    <el-form-item label="操作状态" prop="status">
+      <el-select 
+        v-model="queryForm.status" 
+        placeholder="请选择操作状态"
+        style="width: 200px;"
+        @change="getLogList"
+      >
+        <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
+      </el-select>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="getLogList">查询</el-button>
+      <el-button @click="handleReset">重置</el-button>
+    </el-form-item>
+  </el-form>
+
+  <el-form>
+    <el-form-item>
+      <el-button plain type="danger" :disabled="ids.length === 0" @click="handleDelete">删除</el-button>
+      <el-button plain type="danger" @click="handleClean">清空</el-button>
+    </el-form-item>
+  </el-form>
+
   <el-table :data="logList" @selection-change="handleSelectionChange">
     <el-table-column type="selection" width="55" align="center" />
     <el-table-column label="日志编号" prop="operId" align="center" />
@@ -79,8 +203,8 @@ onMounted(() => {
     <el-table-column label="操作地址" prop="operIp" align="center" />
     <el-table-column label="操作状态" prop="status" align="center" >
       <template #default="scope">
-        <el-tag :type="scope.row.status === 0 ? 'primary' : 'danger'">
-          {{ scope.row.status === 0 ? '成功' : '失败' }}
+        <el-tag :type="statusMap[scope.row.status]?.type || 'info'">
+          {{ statusMap[scope.row.status]?.label || '未知' }}
         </el-tag>
       </template>
     </el-table-column> 
@@ -121,7 +245,7 @@ onMounted(() => {
       <el-row>
         <el-col :span="12">
           <el-form-item label="操作模块：">
-            {{ dialogForm.form.title }}/{{ dialogForm.form.businessType === 0 ? '其他' : dictMap[dialogForm.form.businessType]?.label || '未知' }}
+            {{ dialogForm.form.title }}/{{ dictMap[dialogForm.form.businessType]?.label || '未知' }}
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -156,7 +280,7 @@ onMounted(() => {
         </el-col>
         <el-col :span="8">
           <el-form-item label="操作状态：">
-            {{ dialogForm.form.status === 0 ? '正常' : '失败' }}
+            {{ statusMap[dialogForm.form.status]?.label || '未知' }}
           </el-form-item>
         </el-col>
         <el-col :span="8">
