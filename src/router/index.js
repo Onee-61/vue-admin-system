@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { markRaw } from 'vue'
 import Layout from '@/layout/index.vue'
 
 /**
@@ -47,12 +48,12 @@ export const constantRoutes = [
   },
   {
     path: "/:pathMatch(.*)*",
-    component: () => import('@/views/index.vue'),
+    component: () => import('@/views/error/404.vue'),
     hidden: true
   },
   {
     path: '/',
-    component: Layout,
+    component: (Layout),
     redirect: '/index',
     children: [
       {

@@ -12,19 +12,16 @@ const modules = import.meta.glob('./../../views/**/*.vue')
 export const useRouteStore = defineStore('route', () => {
   // 完整路由（静态路由+动态路由）
   const allRoutes = ref([])
-  const sidebarRoutes = ref([])
-  const topbarRoutes = ref([])
+  const addRoutes = ref([])
 
   const getRoutes = async () => {
     try {
       const res = await getRouters()
       const allData = JSON.parse(JSON.stringify(res.data))
-      const sidebarData = JSON.parse(JSON.stringify(res.data))
-      const topbarData = JSON.parse(JSON.stringify(res.data))
+      const addData = JSON.parse(JSON.stringify(res.data))
       
       allRoutes.value = constantRoutes.concat(filterRouter(allData))
-      sidebarRoutes.value = constantRoutes.concat(filterRouter(sidebarData))
-      topbarRoutes.value = filterRouter(topbarData)
+      addRoutes.value = constantRoutes.concat(filterRouter(addData))
 
       allRoutes.value = allRoutes.value.concat(filterDynamicRoutes())
     
@@ -73,6 +70,11 @@ export const useRouteStore = defineStore('route', () => {
     return res
   }
 
+  const removeRoutes = () => {
+    allRoutes.value = []
+    addRoutes.value = []
+  }
+
   // modules的内容如下：
   // {
   // ../../views/index.vue: () => import("/src/views/index.vue")
@@ -95,10 +97,10 @@ export const useRouteStore = defineStore('route', () => {
 
   return {
     allRoutes,
-    sidebarRoutes,
-    topbarRoutes,
+    addRoutes,
     getRoutes,
     filterRouter,
+    removeRoutes,
     loadView
   }
 })

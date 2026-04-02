@@ -24,7 +24,7 @@ const user = userStore.userInfo
     <div>用户名：{{ user.username }}</div>
   </div>
   <div>
-    <div>角色：{{ user.roles?.[0] }}</div>
+    <div>角色：{{ user.roles }}</div>
   </div>
   <div>
     <div>权限：{{ user.permissions }}</div>

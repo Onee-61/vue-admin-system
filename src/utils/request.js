@@ -32,11 +32,12 @@ request.interceptors.response.use(res => {
   if (code === 401) {
     // 401: 未登录
     // 清除token或者无感登录
-
     // 1. 清除token
     removeToken()
 
     // 2. 无感登录（可选，需后端支持）
+
+
     ElMessage.error(msg || '请登录后重试')
     return Promise.reject(new Error(msg))
   } else if (code === 403) {

@@ -11,7 +11,7 @@ const layoutStore = useLayoutStore()
 const routeStore = useRouteStore()
 
 const isCollapse = computed(() => layoutStore.isCollapse)
-const sidebarRoutes = computed(() => routeStore.sidebarRoutes)
+const addRoutes = computed(() => routeStore.addRoutes)
 const activeMenu = computed(() => {
   const { meta, path } = route
   if (meta.activeMenu) {
@@ -39,7 +39,7 @@ const activeMenu = computed(() => {
       router
     >
       <SidebarItem
-        v-for="route in sidebarRoutes"
+        v-for="route in addRoutes"
         :key="route.path"
         :item="route"
         :basePath="'/'"

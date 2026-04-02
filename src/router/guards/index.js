@@ -29,7 +29,8 @@ router.beforeEach(async (to) => {
     return { path: '/login' }
   }
 
-  const userInfo = userStore.userInfo.roles.length > 0
+  const userInfo = userStore.userInfo.id !== ''
+  // const userInfo = userStore.userInfo.roles.length > 0
   const routeInfo = routeStore.allRoutes.length > 0
   
   // 已登录的用户访问非白名单页面，确保用户信息和路由信息已加载

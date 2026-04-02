@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 
 import { login, getInfo } from "@/api/login"
 import { getToken, setToken, removeToken } from "@/utils/auth"
+import { useRouteStore } from './route.js'
 
 export const useUserStore = defineStore('user', () => {
   const userInfo = reactive({
@@ -23,6 +24,7 @@ export const useUserStore = defineStore('user', () => {
 
   const userLogout = () => {
     removeUserInfo()
+    useRouteStore().removeRoutes()
   }
 
   const getUserInfo = async () => {

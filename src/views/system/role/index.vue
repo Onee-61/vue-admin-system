@@ -2,7 +2,6 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { listRole, changeRoleStatus } from '@/api/system/role'
-
 import { parseTime } from '@/utils/common'
 import EditDialog from './editDialog.vue'
 
@@ -94,19 +93,6 @@ const handleSelectionChange = (selection) => {
   ids.value = selection.map(item => item.roleId)
   single.value = selection.length != 1
   multiple.value = !selection.length
-}
-
-// 每页显示数量变化
-const handleSizeChange = (val) => {
-  pageSize.value = val
-  currentPage.value = 1
-  getRoleList()
-}
-
-// 当前页码变化
-const handleCurrentChange = (val) => {
-  currentPage.value = val
-  getRoleList()
 }
 
 // 搜索角色
@@ -228,30 +214,30 @@ onMounted(() => {
     <el-table-column label="操作" align="center" fixed="right">
       <template #default="scope">
         <el-tooltip content="编辑" placement="top" v-if="scope.row.roleId !== 1">
-          <el-button type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPerm="['system:role:edit']"></el-button>
+          <el-button type="primary" icon="Edit" size="small" @click="handleUpdate(scope.row)" v-hasPerm="['system:role:edit']"></el-button>
         </el-tooltip>
         <el-tooltip content="删除" placement="top" v-if="scope.row.roleId !== 1">
-          <el-button type="danger" icon="Delete" @click="handleDelete(scope.row)" v-hasPerm="['system:role:remove']"></el-button>
+          <el-button type="danger" icon="Delete" size="small" @click="handleDelete(scope.row)" v-hasPerm="['system:role:remove']"></el-button>
         </el-tooltip>
         <el-tooltip content="数据权限" placement="top" v-if="scope.row.roleId !== 1">
-          <el-button type="warning" icon="CircleCheck" @click="handleDataScope(scope.row)" v-hasPerm="['system:role:edit']"></el-button>
+          <el-button type="warning" icon="CircleCheck" size="small" @click="handleDataScope(scope.row)" v-hasPerm="['system:role:edit']"></el-button>
         </el-tooltip>
         <el-tooltip content="分配用户" placement="top" v-if="scope.row.roleId !== 1">
-          <el-button type="success" icon="User" @click="handleAuthUser(scope.row)" v-hasPerm="['system:role:edit']"></el-button>
+          <el-button type="success" icon="User" size="small" @click="handleAuthUser(scope.row)" v-hasPerm="['system:role:edit']"></el-button>
         </el-tooltip>
       </template>
     </el-table-column>
   </el-table>
 
   <el-pagination
-    v-model:current-page="currentPage"
-    v-model:page-size="pageSize"
+    v-model:current-page="queryParams.pageNum"
+    v-model:page-size="queryParams.pageSize"
     :page-sizes="[10, 20, 30, 50]"
     :background="true"
     layout="total, sizes, prev, pager, next, jumper"
     :total="total"
-    @size-change="handleSizeChange"
-    @current-change="handleCurrentChange"
+    @size-change="getRoleList"
+    @current-change="getRoleList"
     style="margin-top: 20px; display: flex; justify-content: flex-end;"
   />
 
